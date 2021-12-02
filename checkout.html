@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/checkout.css">
+</head>
+
+<body class="bg-light">
+
+
+
+    <!-- form part  -->
+    <section class="container py-5">
+        <div class="row">
+
+            <div class=" col-md-12 col-lg-7">
+                <div class="p-5 card">
+                    <h2>BILLING DETAILS</h2>
+                    <hr>
+                    <form>
+                        <input type="text" class="form-control" placeholder="Full Name *" aria-label="Full name"><br>
+                        <input type="text" class="form-control" placeholder="Company Name"
+                            aria-label="company name"><br>
+                        <label for="inputGroupSelect01">Country</label>
+                        <div class="input-group mb-3">
+                            <select class="custom-select" id="inputGroupSelect01">
+                                <option selected>Bangladesh</option>
+                                <option>India</option>
+                                <option>United State</option>
+                                <option>United Kingdom</option>
+                            </select>
+                        </div>
+                        <input type="text" class="form-control" placeholder="House number and Street Number *"
+                            aria-label="First name"><br>
+                        <input type="text" class="form-control" placeholder="Apartment" aria-label="Apartment"><br>
+                        <input type="text" class="form-control" placeholder="Town/City" aria-label="Town/city"><br>
+
+                        <input type="text" class="form-control" placeholder="Postcode/Zip"
+                            aria-label="Postcode/Zip"><br>
+                        <input type="text" class="form-control" placeholder="Apartment" aria-label="Apartment"><br>
+
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="Billing Mobile Number *"
+                                    aria-label="Billing mobile number">
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="Billing Email"
+                                    aria-label="Billing email">
+                            </div>
+                        </div><br>
+                        <h4>ADDITIONAL INFORMATION</h4>
+                        <hr>
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Leave a Comment Here" id="floatingTextarea2"
+                                style="height: 100px"></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- 2nd part  -->
+
+
+            <div class="col-md-12 col-lg-5">
+                <div class="p-5 card">
+                    <h2 class="text-center">YOUR ORDER</h2>
+                    <br>
+                    <div class="d-flex justify-content-between">
+                        <h4>Product</h4>
+                        <h4>Subtotal</h4>
+                    </div>
+                    <hr>
+                    <div id="product">
+                    </div>
+                    <hr>
+                    <div id="subtotal">
+                    </div>
+                    <hr>
+                    <div id="total">
+                    </div>
+                    <hr>
+
+
+                    <h6><input type="checkbox" class="m-1">I have read and agree to the website <a href="#">Terms
+                            and Conditions</a>
+                        <div class="d-grid gap-2 col-6 mx-auto"><br>
+                            <button class="btn btn-primary font-weight-bold" type="button">PLACE ORDER</button>
+
+                        </div>
+                    </h6>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <script>
+        let product = JSON.parse(localStorage.getItem('saveProduct'))
+        product.forEach(productDetails => {
+            const productDiv = document.getElementById('product')
+            let createDiv = document.createElement('div')
+            createDiv.className = "d-flex justify-content-between";
+            const allProduct = `<p>${productDetails.product_name}</p>
+                            <p>$ <span>${productDetails.productTotal}</span></p>`
+            createDiv.innerHTML = allProduct;
+            productDiv.appendChild(createDiv)
+
+        });
+
+        const subtotalDivId = document.getElementById('subtotal')
+        let subtotalDiv = document.createElement('div')
+        subtotalDiv.className = "d-flex justify-content-between";
+        const subtotal = `<p>Subtotal</p>
+                            <p>$ <span>${localStorage.getItem('cartTotal')}</span></p>`
+        subtotalDiv.innerHTML = subtotal;
+        subtotalDivId.appendChild(subtotalDiv)
+
+        const totalDivId = document.getElementById('total')
+        let totalDiv = document.createElement('div')
+        totalDiv.className = "d-flex justify-content-between";
+        const total = `<h3>TOTAL</h3>
+                        <h3>$ <span>${localStorage.getItem('cartTotal')}</span></h3>`
+        totalDiv.innerHTML = total;
+        totalDivId.appendChild(totalDiv)
+    </script>
+
+</body>
+
+</html>

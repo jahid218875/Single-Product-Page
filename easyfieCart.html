@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+        integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/cart.css">
+
+    <title>Shopping Cart</title>
+</head>
+
+<body class="bg-light">
+
+    <div class="container">
+
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody id="product-tbody">
+                        <!-- <tr>
+                            <td>Latest Smart Phone - Xaomi</th>
+                            <td>$<span>15</span></td>
+                            <td><input type="number" min="1" step="1" value="1" class="quantity"></td>
+                            <td>$<span>15</span></td>
+                            <td><i class="fas fa-trash-alt mx-auto"></i></td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-12 Checkout">
+                <a href="checkout.html"><button class="btn btn-primary font-weight-bold" id="checkout">CHECK OUT</button></a>
+                <h5 class="text-right">Cart Totals Price: <span id="total-amount">0.00</span> BDT</h5>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        // console.log(localStorage.getItem('saveProduct'));
+
+        let product = JSON.parse(localStorage.getItem('saveProduct'))
+        product.forEach(productDetails => {
+            const productDiv = document.getElementById('product-tbody')
+            let createTr = document.createElement('tr')
+            createTr.setAttribute("id", "tr_" + productDetails.product_id)
+            createTr.setAttribute("data-id", productDetails.product_id)
+            const allProduct = `<td>${productDetails.product_name}</th>
+                        <td>$<span>${productDetails.product_price}</span></td>
+                        <td><ul class="pagination pagination-sm mt-2">
+                                    <li class="page-item">
+                                        <button class="page-link dec" data-id="${productDetails.product_id}"><i class="fas fa-minus"></i></button>
+                                    </li>
+                                    <li class="page-item quantity border-0" data-id="${productDetails.product_id}" id="quantity_${productDetails.product_id}">${productDetails.product_quantity}</li>
+                                    <li class="page-item">
+                                        <button class="page-link inc" data-id="${productDetails.product_id}"><i class="fas fa-plus"></i></button>
+                                    </li>
+                                </ul></td>
+                        <td>$<span product-total-price="${productDetails.product_price}" id="price_${productDetails.product_id}">${parseInt(productDetails.product_quantity) * parseFloat(productDetails.product_price)}</span></td>
+                        <td style='display:none'>${productDetails.product_id}</td>
+                        <td><i class="fas fa-trash-alt mx-auto remove"></i></td>`
+            createTr.innerHTML = allProduct;
+            productDiv.appendChild(createTr)
+
+            $(document).ready(function () {
+
+                var productAmount = $('#total-amount').text()
+                var productAmountNumber = parseFloat(productAmount)
+                var productP = $('#price_' + productDetails.product_id).text();
+                var productPNumber = parseFloat(productP)
+                $('#total-amount').text(productAmountNumber + productPNumber)
+            })
+
+
+        });
+
+        $(document).ready(function () {
+
+            $('.inc').on('click', function () {
+                var post_id = $(this).attr('data-id');
+                var quantity = $('#quantity_' + post_id).text();
+                $('#quantity_' + post_id).text(++quantity);
+
+                var productPrice = $('#price_' + post_id).attr('product-total-price');
+                var priceNumber = parseFloat(productPrice)
+                $('#price_' + post_id).text(quantity * priceNumber)
+
+                var total = $('#total-amount').text()
+                var totalAmount = parseFloat(total)
+                $('#total-amount').text(totalAmount + priceNumber)
+            })
+
+            $('.dec').on('click', function () {
+                var post_id = $(this).attr('data-id');
+                var quantity = $('#quantity_' + post_id).text();
+                if (quantity <= 1) {
+                    quantity = 1
+                    alert('Enter Positive Quantity')
+                } else {
+                    $('#quantity_' + post_id).text(--quantity);
+
+                    var productPrice = $('#price_' + post_id).attr('product-total-price');
+                    var priceNumber = parseFloat(productPrice)
+                    $('#price_' + post_id).text(quantity * priceNumber)
+
+                    var total = $('#total-amount').text()
+                    var totalAmount = parseFloat(total)
+                    $('#total-amount').text(totalAmount - priceNumber)
+
+                }
+
+
+            })
+
+            $('.remove').on('click', function () {
+
+
+                var pPrice = $(this).parent().parent().find('td').eq(3).text();
+                pPrice = pPrice.split("$")
+                var pPriceNumber = parseFloat(pPrice[1])
+                var total = $('#total-amount').text()
+                var totalAmount = parseFloat(total)
+                $('#total-amount').text(totalAmount - pPriceNumber)
+
+                var post_id = $(this).parent().parent().remove();
+
+
+
+                // console.log($(this).text());
+
+
+
+
+                // })
+            })
+
+            $('#checkout').on('click', function () {
+                let cartProducts = []
+                var items = $('table tbody tr').length;
+                var products = [];
+                $('table tbody tr').each(function () {
+                    var pName = $(this).find('td').eq(0).text();
+                    pName = pName.trim()
+                    var pPrice = $(this).find('td').eq(1).text();
+                    pPrice = pPrice.split("$")
+                    var pQuantity = $(this).find('td').eq(2).text();
+                    pQuantity = pQuantity.trim()
+                    var pTotal = $(this).find('td').eq(3).text();
+                    var pTotalSplit = pTotal.split('$')
+                    var pID = $(this).find('td').eq(4).text();
+
+
+
+                    let allCartProduct = {
+                        product_name: pName,
+                        product_price: pPrice[1],
+                        product_quantity: pQuantity,
+                        productTotal: pTotalSplit[1],
+                        product_id: pID,
+                    }
+
+                    cartProducts.push(allCartProduct);
+
+                    localStorage.removeItem("saveProduct");
+                    localStorage.removeItem("items");
+                    localStorage.removeItem("products");
+                    localStorage.removeItem("cartTotal");
+
+
+                    var productsArray = ["'" + allCartProduct.product_name + "'", "'" + allCartProduct.product_price + "'", "'" + allCartProduct.product_quantity + "'", "'" + allCartProduct.productTotal + "'", "'" + allCartProduct.product_id + "'"];
+
+
+                    products.push(productsArray);
+
+
+
+
+
+                });
+                var total = $('#total-amount').text()
+                var totalAmount = parseFloat(total)
+                var cartTotal = $('#total-amount').text()
+
+
+                localStorage.setItem("cartTotal", cartTotal);
+
+                localStorage.setItem("items", items);
+                localStorage.setItem("products", products);
+
+
+
+
+                // console.log(cartProducts);
+                localStorage.setItem("saveProduct", JSON.stringify(cartProducts));
+
+
+
+
+            })
+        })
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
